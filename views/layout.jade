@@ -2,11 +2,34 @@ doctype html
 html
     head
         title= title
-        link(rel='stylesheet', href='/css/style.css')
-        script(src='/bower_components/jquery/dist/jquery.min.js')
-        link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
-        script(src='/bower_components/bcryptjs/dist/bcrypt.min.js')
-        script(src='/js/index.js')
+        script(src='/js/basket.js/dist/basket.full.min.js')
+        script(src='/js/basket.js/create-stylesheet.unwrapped-0.2.1.js')
+        script.
+          basket.require(
+            { url: '/css/style.css', execute: false },
+            { url: '/bower_components/bootstrap/dist/css/bootstrap.min.css', execute: false }
+          ).then(function(responses) {
+            var length = responses.length
+            for (var i = 0; i < length; i++) {
+              // HACK: function parameters for the promise method don't appear to be documented, but they contain the responses for now.
+              var css = responses[i].data;
+              _stylesheet.appendStyleSheet(css, function(err, style) {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log("Stylesheet successfully load via basket.js");
+                }
+              });
+            }
+          });
+          basket
+            .require({ url: '/bower_components/jquery/dist/jquery.min.js' })
+            .then( function () {
+               basket.require(
+                 { url: '/bower_components/bootstrap/dist/js/bootstrap.min.js'},
+                 { url: '/js/index.js'}
+               )
+            });
+          basket.require({ url: '/bower_components/bcryptjs/dist/bcrypt.min.js' });
     body
         block content
