@@ -211,7 +211,7 @@ $(document).ready(function() {
   $.each(files, function(i, File) {
     var fileTitle = $(File).text();
     var fileDirectory = $(File).parents('ul').prev('b').find('a').text();
-    $.getJSON(`/files/${fileDirectory}/${fileTitle}`, (file => {
+    $.getJSON(`/files/${fileDirectory}/${fileTitle}`, function(file) {
       var currFile = JSON.parse(file);
       var ul = $(ulElem);
       for (var i = 0; i < currFile.challenges.length; i++) {
@@ -235,7 +235,7 @@ $(document).ready(function() {
       $(ul).attr('id', 'n-' + x++);
       $(ul).appendTo($(File).parent());
       $(File).attr('href', '#' + $(ul).attr('id'));
-    }));
+    });
   });
 
   // remove outdated terms from the string
