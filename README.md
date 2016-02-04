@@ -27,10 +27,12 @@ Therefore, I decided to write a project which will help to easily mark challenge
   |- freecodecamp
   ```
   * `git clone https://github.com/bugron/FCCUserEditor.git`
-2. Install dependencies: `npm install` and `bower install`.
-3. **IMPORTANT!**: Make sure you have `mongod` running and FreeCodeCamp's DB is located at `localhost:27017/freecodecamp`.
-4. In your cloned repository's folder run: `npm start`. By default It will start serving at `http://localhost:3005`.
-5. Go to `http://localhost:3005/files` to start using the editor.
+2. `<yourFCC_FOLDER_NAME>` is whatever you named your Free Code Camp repository locally (see `freecodecamp` above).
+  * `echo 'FCC_FOLDER_NAME = "<yourFCC_FOLDER_NAME>"' >> .env`
+3. Install dependencies: `npm install` and `bower install`.
+4. **IMPORTANT!**: Make sure you have `mongod` running and FreeCodeCamp's DB is located at `localhost:27017/freecodecamp`.
+5. In your cloned repository's folder run: `npm start`. By default It will start serving at `http://localhost:3005`.
+6. Go to `http://localhost:3005/files` to start using the editor.
 
 ## How to use FCCUserEditor?
 ![](http://i.imgur.com/uGcn5hi.png)
