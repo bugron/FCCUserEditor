@@ -118,4 +118,33 @@ block content
         button.btn.btn-danger.btn-block.btn-md.disabled#deleteUser Delete user
 
     script.
+      function replaceSafeTags(value) {
+        return value
+          .replace(/fccss/gi, '<script>')
+          .replace(/fcces/gi, '</' + 'script>');
+      }
+
+      function replaceFccfaaAttr(value) {
+        return value.replace(/<form[^>]*>/, function(val) {
+          return val.replace(/fccfaa(\s*?)=/, 'action$1=');
+        });
+      }
+
+      function decodeTags(val) {
+        return replaceSafeTags(replaceFccfaaAttr(val));
+      }
+
       var Users = !{JSON.stringify(userList)};
+      var length = Users.length;
+      for (var i = 0; i < length; i++) {
+        if (Users[i].completedChallenges &&
+          Users[i].completedChallenges.length > 0
+        ) {
+          for (var k = 0; k < Users[i].completedChallenges.length; k++) {
+            if (Users[i].completedChallenges[k].solution) {
+              Users[i].completedChallenges[k].solution =
+                decodeTags(Users[i].completedChallenges[k].solution);
+            }
+          }
+        }
+      }
