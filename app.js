@@ -7,7 +7,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 // New Code
-var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/freecodecamp');
 
@@ -19,14 +18,14 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon([__dirname, '/public/favicon.ico'].join('')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
-app.use(function(req,res,next){
+app.use(function(req, res, next) {
   req.db = db;
   next();
 });
@@ -37,13 +36,13 @@ function replaceScriptTags(value) {
   return value
     .replace(/<script>/gi, 'fccss')
     .replace(/<\/script>/gi, 'fcces');
-};
+}
 
 function replaceFormAction(value) {
   return value.replace(/<form[^>]*>/, function(val) {
     return val.replace(/action(\s*?)=/, 'fccfaa$1=');
   });
-};
+}
 
 function encodeTags(val) {
   return replaceScriptTags(replaceFormAction(val));
@@ -52,14 +51,14 @@ function encodeTags(val) {
 app.get('/files', function(req, res, next) {
   var db = req.db;
   var collection = db.get('user');
-  collection.find({},{}, function(e, users) {
+  collection.find({}, {}, function(e, users) {
     var fileObj;
     fs.readdir(config.fccPath, function(err, files) {
       if (err) {
         return next(err);
       }
       fileObj = files.reduce(function(acc, curr) {
-        if(!curr.match(/hikes/gi)) {
+        if (!curr.match(/hikes/gi)) {
           acc[curr] = fs.readdirSync(`${config.fccPath}/${curr}`);
         }
         return acc;
@@ -98,19 +97,19 @@ app.get('/files/:filePath/:fileName', function(req, res, next) {
   });
 });
 
-/// catch 404 and forwarding to error handler
+// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-/// error handlers
+// error handlers
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -121,7 +120,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

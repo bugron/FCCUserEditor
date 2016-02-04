@@ -13,15 +13,16 @@ router.post('/deleteuser', function(req, res) {
   var collection = db.get('user');
   collection.remove({
     username: userName
-  }, function (err, doc) {
+  }, function(err) {
     if (err) {
-      res.send("There was a problem removing the information from the database.");
-    }
-    else {
-      res.send("The user '" + userName + "' was successfully removed from the database!");
+      res.send('There was a problem removing the information' +
+        'from the database.');
+    } else {
+      res.send('The user ' + userName +
+        ' was successfully removed from the database!');
     }
   });
-})
+});
 
 /* POST to Add User Service */
 router.post('/updateuser', function(req, res) {
@@ -38,17 +39,17 @@ router.post('/updateuser', function(req, res) {
   // Submit to the DB
   collection.update({
     username: User.username
-  }, User, {upsert: true}, function (err, doc) {
+  }, User, {upsert: true}, function(err) {
     if (err) {
       // If it failed, return error
-      res.send("There was a problem adding the information to the database.");
-    }
-    else {
-      res.send("We've successfully updated the information in the database!");
-      // If it worked, set the header so the address bar doesn't still say /adduser
-      //res.location("userlist");
+      res.send('There was a problem adding the information to the database.');
+    } else {
+      res.send('We\'ve successfully updated the information in the database!');
+      /* If it worked, set the header so the address bar doesn't
+      still say /adduser*/
+      // res.location("userlist");
       // And forward to success page
-      //res.redirect("userlist");
+      // res.redirect("userlist");
     }
   });
 });

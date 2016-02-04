@@ -1,13 +1,15 @@
+/* global dcodeIO */
+/* global $ */
 $(document).ready(function() {
   $('.user-form').hide();
-  $("option:selected").removeAttr("selected");
+  $('option:selected').removeAttr('selected');
   $('#middle').css('overflow', 'auto');
   $('#middle').css('height', '500px');
 
   $('#markRandom').on('click', function() {
     if (!$('#markRandom').hasClass('disabled')) {
-      $("#middle input[type=checkbox]").prop('checked', false);
-      $.each($("#middle .random input[type=checkbox]"), function(i, checkbox) {
+      $('#middle input[type=checkbox]').prop('checked', false);
+      $.each($('#middle .random input[type=checkbox]'), function(i, checkbox) {
         if (Math.random() > 0.6 && !$(checkbox).prop('checked')) {
           $(checkbox).prop('checked', true);
         }
@@ -16,15 +18,15 @@ $(document).ready(function() {
   });
 
   $('#deleteUser').click(function() {
-    if($("option:selected") && !$('#deleteUser').hasClass('disabled')) {
-      $.post('/deleteuser', 
+    if ($('option:selected') && !$('#deleteUser').hasClass('disabled')) {
+      $.post('/deleteuser',
         {
-          username: $("option:selected").text()
+          username: $('option:selected').text()
         },
-        function(data) {
+        function() {
           location.reload();
         }
-      );      
+      );
     }
   });
 
@@ -38,7 +40,7 @@ $(document).ready(function() {
       var userObject = {}, currObj = {}, challengeType;
       userObject.completedChallenges = [];
       userObject.progressTimestamps = [];
-      $.each($("#middle .random input[type=checkbox]:checked"),
+      $.each($('#middle .random input[type=checkbox]:checked'),
         function(i, checkbox) {
           challengeType = $(checkbox).data('type');
           currObj.completedDate = Date.now();
@@ -83,13 +85,13 @@ $(document).ready(function() {
         .prop('checked');
 
       $.ajax({
-        type: "POST",
+        type: 'POST',
         url: '/updateuser',
         data: JSON.stringify(userObject),
-        success: function(data) {
+        success: function() {
           location.reload();
         },
-        error: function(data) {
+        error: function() {
           location.reload();
         },
         dataType: 'json',
@@ -98,15 +100,15 @@ $(document).ready(function() {
     }
   });
 
-  var index = $('select').prop("selectedIndex");
-  $('option').on('click', function() {
+  var index = $('select').prop('selectedIndex');
+  function listenOnChange() {
     $('#markComplete').removeClass('disabled');
     $('#deleteUser').removeClass('disabled');
     $('#markRandom').removeClass('disabled');
-    index = $('select').prop("selectedIndex");
+    index = $('select').prop('selectedIndex');
 
-    $("#middle input[type=checkbox]").prop('checked', false);
-    $.each($("#middle .random input[type=checkbox]"), function(i, opt) {
+    $('#middle input[type=checkbox]').prop('checked', false);
+    $.each($('#middle .random input[type=checkbox]'), function(i, opt) {
       if (Users[index].completedChallenges) {
         for (var k = 0; k < Users[index].completedChallenges.length; k++) {
           if (
@@ -122,7 +124,7 @@ $(document).ready(function() {
     // Bootstrap accordion needs this to work properly
     $('.map-collapse').css('height', '100%');
     $('.collapse:not(".in")').addClass('in');
-    
+
     if (Users[index].username === this.value) {
       // fill all inputs from a user object
       $('#inputUserName').val(Users[index].username);
@@ -133,57 +135,52 @@ $(document).ready(function() {
       $('#inputUserLocation').val(Users[index].location);
       $('#inputUserBio').val(Users[index].bio);
 
-      var check;
-      Users[index].isBanned ? check = true : check = false;
-        $('#inputIsBanned').prop('checked', check);
-      Users[index].isCheater ? check = true : check = false;
-        $('#inputIsCheater').prop('checked', check)
-      Users[index].isHonest ? check = true : check = false;
-        $('#inputIsHonest').prop('checked', check)
-      Users[index].isLocked ? check = true : check = false;
-        $('#inputIsLocked').prop('checked', check)
-      Users[index].isGithubCool ? check = true : check = false;
-        $('#inputIsGithubCool').prop('checked', check)
-      Users[index].isMigrationGrandfathered ? check = true : check = false;
-        $('#inputIsMigrationGrandfathered').prop('checked', check)
-      Users[index].isUniqMigrated ? check = true : check = false;
-        $('#inputIsUniqMigrated').prop('checked', check)
-      Users[index].isBackEndCert ? check = true : check = false;
-        $('#inputIsBackEndCert').prop('checked', check)
-      Users[index].isFullStackCert ? check = true : check = false;
-        $('#inputIsFullStackCert').prop('checked', check)
-      Users[index].emailVerified ? check = true : check = false;
-        $('#inputIsEmailVerified').prop('checked', check)
-      Users[index].sendMonthlyEmail ? check = true : check = false;
-        $('#inputIsSendMonthlyEmail').prop('checked', check)
+      $('#inputIsBanned').prop('checked', !!Users[index].isBanned);
+      $('#inputIsCheater').prop('checked', !!Users[index].isCheater);
+      $('#inputIsHonest').prop('checked', !!Users[index].isHonest);
+      $('#inputIsLocked').prop('checked', !!Users[index].isLocked);
+      $('#inputIsGithubCool').prop('checked', !!Users[index].isGithubCool);
+      $('#inputIsMigrationGrandfathered').prop('checked',
+        !!Users[index].isMigrationGrandfathered);
+      $('#inputIsUniqMigrated').prop('checked', !!Users[index].isUniqMigrated);
+      $('#inputIsBackEndCert').prop('checked', !!Users[index].isBackEndCert);
+      $('#inputIsFullStackCert').prop('checked',
+        !!Users[index].isFullStackCert);
+      $('#inputIsEmailVerified').prop('checked', !!Users[index].emailVerified);
+      $('#inputIsSendMonthlyEmail').prop('checked',
+        !!Users[index].sendMonthlyEmail);
     }
     // show all user inputs
     $('.user-form').show();
-  });
+  }
+
+  $('option').on('click', listenOnChange);
+  $('select').on('change', listenOnChange);
 
   // check/uncheck current and all children checkboxes
-  $("#middle input[type=checkbox]").on('click', function() {
+  $('#middle input[type=checkbox]').on('click', function() {
     var toCheck = '';
-    if(($(this).prop('checked'))) {
+    if (($(this).prop('checked'))) {
       toCheck = 'checked';
+
     }
-    $(this).parent().find("input[type=checkbox]").
+    $(this).parent().find('input[type=checkbox]').
       prop('checked', toCheck);
   });
 
   // check/uncheck all checkboxes with one click
-  $("#globalCheck").on('click', function() {
+  $('#globalCheck').on('click', function() {
     var toCheck = '';
-    if(($(this).prop('checked'))) {
+    if (($(this).prop('checked'))) {
       toCheck = 'checked';
     }
-    $("#middle input[type=checkbox]").prop('checked', toCheck);
+    $('#middle input[type=checkbox]').prop('checked', toCheck);
   });
 
   // check if we're going to save a user or to ADD a user
   $('#inputUserName').on('change keyup', function() {
     var self = this;
-    if($(self).val()) {
+    if ($(self).val()) {
       $('#markComplete').removeClass('disabled');
       $('#deleteUser').removeClass('disabled');
       $('#markRandom').removeClass('disabled');
@@ -238,13 +235,13 @@ $(document).ready(function() {
     });
   });
 
+  /*
   // remove outdated terms from the string
   function normalizeChallengeName(str) {
     var challengesRegex = /^(bonfire|waypoint|zipline|basejump|checkpoint):\s/i;
     return str.replace(challengesRegex, '');
-  };
+  }
 
-  /*
   // show challenges as button when clicking on a block
   files.on('click', function(e) {
     e.preventDefault();
