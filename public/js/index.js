@@ -78,7 +78,7 @@ $(document).ready(function() {
         toastr.success('Cache is successfully cleared!');
         $('#clearCache').addClass('disabled');
       } else {
-        toastr.error('An error occoured while clearing the cache');
+        toastr.error('An error occoured while clearing the cache.');
       }
     }
   });
@@ -143,7 +143,7 @@ $(document).ready(function() {
         contentType: 'application/json'
       })
         .done(function() {
-          toastr.success('User is successfully deleted from the DB!');
+          toastr.success('DB information is successfully updated!');
           updateUsernames();
         })
         .fail(function() {
