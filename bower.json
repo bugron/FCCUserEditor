@@ -13,6 +13,7 @@
   "dependencies": {
     "bcryptjs": "^2.3.0",
     "jquery": "~2.1.4",
-    "bootstrap": "~3.3.4"
+    "bootstrap": "~3.3.4",
+    "toastr": "^2.1.2"
   }
 }

@@ -11,11 +11,11 @@
   "globals": {
     "window": true,
     "$": true,
-    "ga": true,
     "jQuery": true,
     "router": true,
     "dcodeIO": true,
-    "Users": true
+    "Users": true,
+    "toastr": true
   },
   "rules": {
     "comma-dangle": 2,

@@ -1,6 +1,13 @@
-/* global dcodeIO */
-/* global $ */
 $(document).ready(function() {
+  toastr.options = {
+    'closeButton': true,
+    'newestOnTop': true,
+    'progressBar': true,
+    'positionClass': 'toast-bottom-right',
+    'preventDuplicates': true,
+    'timeOut': '4000'
+  };
+
   $('.user-form').hide();
   $('.option.selected').removeClass('selected');
   $('#middle').css('overflow', 'auto');
@@ -17,16 +24,37 @@ $(document).ready(function() {
     }
   });
 
-  $('#deleteUser').click(function() {
-    if ($('.option.selected') && !$('#deleteUser').hasClass('disabled')) {
-      $.post('/deleteuser',
-        {
-          username: $('.option.selected').text()
-        },
-        function() {
-          location.reload();
+  function updateUsernames() {
+    $.post('/getusers').done(function(users) {
+      if (users.length) {
+        var ulElems = '';
+        Users = users;
+        for (var i = 0; i < users.length; i++) {
+          ulElems += '<li><a class="option" href="#" data-id="' + i +
+            '">' + users[i].username + '</a></li>';
         }
-      );
+        $('.select').empty();
+        $('.select').html(ulElems);
+        $('#markComplete').text('Save user');
+        $(document).on('click', '.option', listenOnChange);
+      }
+    });
+  }
+
+  $('#deleteUser').click(function() {
+    if ($('.option.selected').length &&
+        !$('#deleteUser').hasClass('disabled')
+    ) {
+      $.post('/deleteuser', {
+        username: $('.option.selected').text()
+      })
+        .done(function() {
+          toastr.success('User is successfully deleted from the DB!');
+          updateUsernames();
+        })
+        .fail(function() {
+          toastr.error('Some error occoured.');
+        });
     }
   });
 
@@ -84,19 +112,18 @@ $(document).ready(function() {
       userObject.sendMonthlyEmail = $('#inputIsSendMonthlyEmail')
         .prop('checked');
 
-      $.ajax({
-        type: 'POST',
-        url: '/updateuser',
+      $.post('/updateuser', {
         data: JSON.stringify(userObject),
-        success: function() {
-          location.reload();
-        },
-        error: function() {
-          location.reload();
-        },
         dataType: 'json',
         contentType: 'application/json'
-      });
+      })
+        .done(function() {
+          toastr.success('User is successfully deleted from the DB!');
+          updateUsernames();
+        })
+        .fail(function() {
+          toastr.error('Some error occoured.');
+        });
     }
   });
 
@@ -156,7 +183,7 @@ $(document).ready(function() {
     $('.user-form').show();
   }
 
-  $('.option').on('click', listenOnChange);
+  $(document).on('click', '.option', listenOnChange);
 
   // check/uncheck current and all children checkboxes
   $('#middle input[type=checkbox]').on('click', function() {
@@ -230,29 +257,4 @@ $(document).ready(function() {
       $(File).attr('href', '#' + $(ul).attr('id'));
     });
   });
-
-  /*
-  // remove outdated terms from the string
-  function normalizeChallengeName(str) {
-    var challengesRegex = /^(bonfire|waypoint|zipline|basejump|checkpoint):\s/i;
-    return str.replace(challengesRegex, '');
-  }
-
-  // show challenges as button when clicking on a block
-  files.on('click', function(e) {
-    e.preventDefault();
-    var fileTitle = $(this).text();
-    var fileDirectory = $(this).parents('ul').prev('b').find('a').text();
-    $.getJSON(`/files/${fileDirectory}/${fileTitle}`, (file => {
-      var f = JSON.parse(file);
-      var child = '<h2>' + f.name + '</h2>';
-      for(var i = 0; i < f.challenges.length; i++) {
-        child += '<div class="btn btn-block btn-warning">' +
-          f.challenges[i].title + '</div>';
-      }
-      $('#right').empty();
-      $('#right').append(child);
-    }));
-  });
-  */
 });

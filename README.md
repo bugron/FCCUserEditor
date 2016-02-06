@@ -60,15 +60,15 @@ When you click any of `Save/Add user` or `Delete user` buttons the page will be 
 2. Add ability to change user's `username` (something like 'Rename mode' checkbox).
 3. Make host, port, DB URL configurable.
 4. Better error handling (ex. `http://localhost:3005/files` will fail if DB is not available or there are no users in the DB).
-5. Add a notification if changes are/aren't saved successfully in the DB. [toastr](https://github.com/codeseven/toastr/) is a nice one.
+5. ~~Add a notification if changes are/aren't saved successfully in the DB. [toastr](https://github.com/codeseven/toastr/) is a nice one.~~
 
- 5.1 Don't reload the page on DB and API queries, just show a toast.
+  5.1 ~~Don't reload the page on DB and API queries, just show a toast.~~
 
- 5.2 Clicking `Save user` button does nothing when nothing is changed (to reduce unwanted DB load and page reloads). Notify with a toast that won't submit since nothing changed.
+  5.2 ~~*Clicking `Save user` button does nothing when nothing is changed (to reduce unwanted DB load and page reloads). Notify with a toast that won't submit since nothing changed.*~~ While this is nice to have but, actually, this is hard to do because even if you enter the same password bcrypt will generate a brand new hash so if nothing else is changed password hashes will differ even if they both are calculated based on the same password.
 6. Ability to set `JSON` files location in web interface.
 7. Cache jQuery objects for better performance
 8. Implement rest of user object's properties (see `common/models/user.json` in FCC's main repository) and explain all of them here.
-9. Use [basket.js](https://github.com/addyosmani/basket.js) to load JS and CSS files (as an experiment).
+9. ~~Use [basket.js](https://github.com/addyosmani/basket.js) to load JS and CSS files (as an experiment).~~ **UPD**. Experiment failed, will try next time.
 
 ## Contributing
 See [CONTRIBUTING.md](https://github.com/bugron/FCCUserEditor/blob/master/CONTRIBUTING.md)
