@@ -2,7 +2,7 @@
 /* global $ */
 $(document).ready(function() {
   $('.user-form').hide();
-  $('option:selected').removeAttr('selected');
+  $('.option.selected').removeClass('selected');
   $('#middle').css('overflow', 'auto');
   $('#middle').css('height', '500px');
 
@@ -18,10 +18,10 @@ $(document).ready(function() {
   });
 
   $('#deleteUser').click(function() {
-    if ($('option:selected') && !$('#deleteUser').hasClass('disabled')) {
+    if ($('.option.selected') && !$('#deleteUser').hasClass('disabled')) {
       $.post('/deleteuser',
         {
-          username: $('option:selected').text()
+          username: $('.option.selected').text()
         },
         function() {
           location.reload();
@@ -100,13 +100,15 @@ $(document).ready(function() {
     }
   });
 
-  var index = $('select').prop('selectedIndex');
-  function listenOnChange() {
-    $('#markComplete').removeClass('disabled');
-    $('#deleteUser').removeClass('disabled');
-    $('#markRandom').removeClass('disabled');
-    index = $('select').prop('selectedIndex');
-
+  // fetch files but don't check for completed challenges
+  var index = -1;
+  function listenOnChange(e) {
+    e.preventDefault();
+    $('.option.selected').removeClass('selected');
+    $(this).addClass('selected');
+    $('.dropdown-toggle .text').text($(this).text());
+    $('#right button').removeClass('disabled');
+    index = $(this).data('id');
     $('#middle input[type=checkbox]').prop('checked', false);
     $.each($('#middle .random input[type=checkbox]'), function(i, opt) {
       if (Users[index].completedChallenges) {
@@ -125,7 +127,7 @@ $(document).ready(function() {
     $('.map-collapse').css('height', '100%');
     $('.collapse:not(".in")').addClass('in');
 
-    if (Users[index].username === this.value) {
+    if (Users[index].username === $(this).text()) {
       // fill all inputs from a user object
       $('#inputUserName').val(Users[index].username);
       $('#inputUserEmail').val(Users[index].email);
@@ -154,8 +156,7 @@ $(document).ready(function() {
     $('.user-form').show();
   }
 
-  $('option').on('click', listenOnChange);
-  $('select').on('change', listenOnChange);
+  $('.option').on('click', listenOnChange);
 
   // check/uncheck current and all children checkboxes
   $('#middle input[type=checkbox]').on('click', function() {
@@ -181,11 +182,8 @@ $(document).ready(function() {
   $('#inputUserName').on('change keyup', function() {
     var self = this;
     if ($(self).val()) {
-      $('#markComplete').removeClass('disabled');
-      $('#deleteUser').removeClass('disabled');
-      $('#markRandom').removeClass('disabled');
-
-      $.each($('option'), function() {
+      $('#right button').removeClass('disabled');
+      $.each($('.option'), function() {
         if ($(this).text() === $(self).val()) {
           $('#markComplete').text('Save user');
           return false;
@@ -195,9 +193,7 @@ $(document).ready(function() {
         }
       });
     } else {
-      $('#markComplete').addClass('disabled');
-      $('#deleteUser').addClass('disabled');
-      $('#markRandom').addClass('disabled');
+      $('#right button').addClass('disabled');
     }
   });
 
@@ -213,7 +209,7 @@ $(document).ready(function() {
       var ul = $(ulElem);
       for (var i = 0; i < currFile.challenges.length; i++) {
         var checked = '';
-        if (Users[index].completedChallenges) {
+        if (index !== -1 && Users[index].completedChallenges) {
           for (var k = 0; k < Users[index].completedChallenges.length; k++) {
             if (
               Users[index].completedChallenges[k].name ===

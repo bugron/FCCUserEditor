@@ -5,9 +5,14 @@ block content
       .col-md-5.col-lg-5#left
         h1.
           Select a User from the list
-        select.form-control
-          each user, i in userList
-            option= user.username
+        .dropdown
+          button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+            span.text Select a User from the list
+            span.caret
+          ul.dropdown-menu.select
+            each user, i in userList
+              li
+                a.option(href="#", data-id="#{i}")= user.username
         .row.user-form
           form.form-horizontal#formAddUser(name="adduser", method="post")
             .form-group(style='padding-top:20px;')
