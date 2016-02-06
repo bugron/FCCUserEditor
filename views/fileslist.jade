@@ -4,10 +4,11 @@ block content
     .row
       .col-md-5.col-lg-5#left
         h1.
-          Select a User from the list
+          Choose a user to get started
         .dropdown
           button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
-            span.text Select a User from the list
+            span.text Click to select a user from the list
+            | 
             span.caret
           ul.dropdown-menu.select
             each user, i in userList
@@ -121,6 +122,8 @@ block content
         button.btn.btn-warning.btn-block.btn-md.disabled#markRandom Check random challenges
         button.btn.btn-primary.btn-block.btn-md.disabled#markComplete(type='submit', form='formAddUser') Save user
         button.btn.btn-danger.btn-block.btn-md.disabled#deleteUser Delete user
+        div(style='margin-top:80px;')
+        button.btn.btn-danger.btn-block.btn-md.disabled#clearCache(title='Remove cached JSON files from browser\'s localStorage') Clear cache
 
     script.
       function replaceSafeTags(value) {

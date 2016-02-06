@@ -15,7 +15,8 @@
     "router": true,
     "dcodeIO": true,
     "Users": true,
-    "toastr": true
+    "toastr": true,
+    "JSONCache": true
   },
   "rules": {
     "comma-dangle": 2,

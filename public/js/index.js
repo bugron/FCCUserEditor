@@ -8,6 +8,10 @@ $(document).ready(function() {
     'timeOut': '4000'
   };
 
+  JSONCache.settings.debug = false;
+  JSONCache.settings.itemLifetime = 24 * 60 * 60 * 1000;
+  JSONCache.settings.maxCacheSize = 8388608;
+
   $('.user-form').hide();
   $('.option.selected').removeClass('selected');
   $('#middle').css('overflow', 'auto');
@@ -55,6 +59,27 @@ $(document).ready(function() {
         .fail(function() {
           toastr.error('Some error occoured.');
         });
+    }
+  });
+
+  $('#clearCache').click(function() {
+    if (!$('#clearCache').hasClass('disabled')) {
+      JSONCache.clear();
+      var keys = Object.keys(localStorage),
+        length = keys.length,
+        isClear = true;
+      for (var i = 0; i < length; i++) {
+        if (keys[i].match(/JSONCache/gi)) {
+          isClear = false;
+          break;
+        }
+      }
+      if (isClear) {
+        toastr.success('Cache is successfully cleared!');
+        $('#clearCache').addClass('disabled');
+      } else {
+        toastr.error('An error occoured while clearing the cache');
+      }
     }
   });
 
@@ -231,30 +256,34 @@ $(document).ready(function() {
   $.each(files, function(i, File) {
     var fileTitle = $(File).text();
     var fileDirectory = $(File).parents('ul').prev('b').find('a').text();
-    $.getJSON(`/files/${fileDirectory}/${fileTitle}`, function(file) {
-      var currFile = JSON.parse(file);
-      var ul = $(ulElem);
-      for (var i = 0; i < currFile.challenges.length; i++) {
-        var checked = '';
-        if (index !== -1 && Users[index].completedChallenges) {
-          for (var k = 0; k < Users[index].completedChallenges.length; k++) {
-            if (
-              Users[index].completedChallenges[k].name ===
-              currFile.challenges[i].title
-            ) {
-              checked = 'checked="checked"';
-              break;
+    JSONCache.getCachedJSON(`/files/${fileDirectory}/${fileTitle}`,
+    {
+      success: function(file) {
+        var currFile = JSON.parse(file);
+        var ul = $(ulElem);
+        for (var i = 0; i < currFile.challenges.length; i++) {
+          var checked = '';
+          if (index !== -1 && Users[index].completedChallenges) {
+            for (var k = 0; k < Users[index].completedChallenges.length; k++) {
+              if (
+                Users[index].completedChallenges[k].name ===
+                currFile.challenges[i].title
+              ) {
+                checked = 'checked="checked"';
+                break;
+              }
             }
           }
+          $('<li><input type="checkbox" data-id="' + currFile.challenges[i].id +
+            '" data-type="' + currFile.challenges[i].challengeType + '"' +
+            checked + '>' + ' <a href="#">' + currFile.challenges[i].title +
+            '</a></li>').appendTo($(ul));
         }
-        $('<li><input type="checkbox" data-id="' + currFile.challenges[i].id +
-          '" data-type="' + currFile.challenges[i].challengeType + '"' +
-          checked + '>' + ' <a href="#">' + currFile.challenges[i].title +
-          '</a></li>').appendTo($(ul));
+        $(ul).attr('id', 'n-' + x++);
+        $(ul).appendTo($(File).parent());
+        $(File).attr('href', '#' + $(ul).attr('id'));
+        $('#clearCache').removeClass('disabled');
       }
-      $(ul).attr('id', 'n-' + x++);
-      $(ul).appendTo($(File).parent());
-      $(File).attr('href', '#' + $(ul).attr('id'));
     });
   });
 });
