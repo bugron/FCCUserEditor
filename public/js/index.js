@@ -45,6 +45,10 @@ $(document).ready(function() {
     });
   }
 
+  $('#inputIsRenameMode').click(function() {
+    $('#markComplete').text('Save user');
+  });
+
   $('#deleteUser').click(function() {
     if ($('.option.selected').length &&
         !$('#deleteUser').hasClass('disabled')
@@ -256,8 +260,8 @@ $(document).ready(function() {
 
     var self = this;
     if ($(self).val()) {
+      $('#right .change-buttons button').removeClass('disabled');
       if (!$('#inputIsRenameMode').prop('checked')) {
-        $('#right .change-buttons button').removeClass('disabled');
         $.each($('.option'), function() {
           if (
             $(this).text() === $(self).val() &&
@@ -277,16 +281,16 @@ $(document).ready(function() {
   });
 
   // fill all challenge names
-  var files = $('.clickFile');
-  var x = 1, ulElem = '<ul class = "collapse map-collapse no-transition ' +
-    'random", style="list-style-type:none;padding-left:20px;">';
+  var files = $('.clickFile'), x = 1,
+    ulElem = '<ul class = "collapse map-collapse no-transition ' +
+      'random", style="list-style-type:none;padding-left:20px;">';
   $.each(files, function(i, File) {
-    var fileTitle = $(File).text();
-    var fileDirectory = $(File).parents('ul').prev('b').find('a').text();
+    var fileTitle = $(File).text(),
+      fileDirectory = $(File).parents('ul').prev('b').find('a').text();
     JSONCache.getCachedJSON(`/files/${fileDirectory}/${fileTitle}`, {
       success: function(file) {
-        var currFile = JSON.parse(file);
-        var ul = $(ulElem);
+        var currFile = JSON.parse(file),
+          ul = $(ulElem);
         for (var i = 0; i < currFile.challenges.length; i++) {
           var checked = '';
           if (index !== -1 && Users[index].challengeMap) {
