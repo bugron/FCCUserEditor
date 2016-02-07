@@ -1,18 +1,21 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express'),
+    router = express.Router(),
+    ObjectID = require('mongodb').ObjectID;
 
-/* GET home page. */
+/* GET home page */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
-/* DELETE a User. */
+/* DELETE a User from DB */
 router.post('/deleteuser', function(req, res) {
-  var db = req.db;
-  var userName = req.body.username;
-  var collection = db.get('user');
+  var db = req.db,
+    userID = req.body._id,
+    userName = req.body.username,
+    collection = db.get('user');
+
   collection.remove({
-    username: userName
+    '_id': ObjectID(userID)
   }, function(err) {
     if (err) {
       res.status(404).send('There was a problem removing the information' +
@@ -24,10 +27,11 @@ router.post('/deleteuser', function(req, res) {
   });
 });
 
-/* GET users from DB */
+/* GET Users from DB */
 router.post('/getusers', function(req, res) {
-  var db = req.db;
-  var collection = db.get('user');
+  var db = req.db,
+    collection = db.get('user');
+
   collection.find({}, {}, function(e, users) {
     var namesObj = [];
     if (users.length) {
@@ -37,34 +41,29 @@ router.post('/getusers', function(req, res) {
   });
 });
 
-/* POST to Add User Service */
+/* Add or Update a User object */
 router.post('/updateuser', function(req, res) {
+  var db = req.db,
+    User = JSON.parse(req.body.data),
+    searchObj = {},
+    newUser = !!User.upsert,
+    collection = db.get('user');
 
-  // Set our internal DB variable
-  var db = req.db;
+  if (newUser) {
+    searchObj = {username: User.username};
+    delete User._id;
+  } else {
+    searchObj = {'_id': ObjectID(User._id)};
+  }
+  delete User.upsert;
 
-  // Get our form values. These rely on the "name" attributes
-  var User = JSON.parse(req.body.data);
-
-  // Set our collection
-  var collection = db.get('user');
-
-  // Submit to the DB
-  collection.update({
-    username: User.username
-  }, User, {upsert: true}, function(err) {
+  collection.update(searchObj, User, {upsert: newUser}, function(err) {
     if (err) {
-      // If it failed, return error
       res.status(404).send('There was a problem adding the information to ' +
         'the database.');
     } else {
       res.status(200).send('We\'ve successfully updated the information ' +
         'in the database!');
-      /* If it worked, set the header so the address bar doesn't
-      still say /adduser*/
-      // res.location("userlist");
-      // And forward to success page
-      // res.redirect("userlist");
     }
   });
 });

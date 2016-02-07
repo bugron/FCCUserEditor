@@ -18,8 +18,8 @@ block content
           form.form-horizontal#formAddUser(name="adduser", method="post")
             .form-group(style='padding-top:20px;')
               .col-xs-6
-                input.form-control#inputUserName(type="text", placeholder="Username", name="username", required)
-                //.input-group
+                .input-group
+                  input.form-control#inputUserName(type="text", placeholder="Username", name="username", required)
                   span.input-group-addon
                     input#inputIsRenameMode(type="checkbox", name="isRenameMode" title="Rename if checked instead of adding a new user")
               .col-xs-6
@@ -119,9 +119,10 @@ block content
 
       .col-md-2.col-lg-2#right
         div(style='margin-bottom:80px;')
-        button.btn.btn-warning.btn-block.btn-md.disabled#markRandom Check random challenges
-        button.btn.btn-primary.btn-block.btn-md.disabled#markComplete(type='submit', form='formAddUser') Save user
-        button.btn.btn-danger.btn-block.btn-md.disabled#deleteUser Delete user
+        .change-buttons
+          button.btn.btn-warning.btn-block.btn-md.disabled#markRandom Check random challenges
+          button.btn.btn-primary.btn-block.btn-md.disabled#markComplete(type='submit', form='formAddUser') Save user
+          button.btn.btn-danger.btn-block.btn-md.disabled#deleteUser Delete user
         div(style='margin-top:80px;')
         button.btn.btn-danger.btn-block.btn-md.disabled#clearCache(title='Remove cached JSON files from browser\'s localStorage') Clear cache
 

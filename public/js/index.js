@@ -50,6 +50,7 @@ $(document).ready(function() {
         !$('#deleteUser').hasClass('disabled')
     ) {
       $.post('/deleteuser', {
+        _id: Users[index]._id,
         username: $('.option.selected').text()
       })
         .done(function() {
@@ -113,9 +114,9 @@ $(document).ready(function() {
       userObject.email = $('#inputUserEmail').val();
 
       // Synchronously generate a valid 5 rounds bcrypt hash
-      var bcrypt = dcodeIO.bcrypt;
-      var salt = bcrypt.genSaltSync(5);
-      var pass = bcrypt.hashSync($('#inputUserPass').val(), salt);
+      var bcrypt = dcodeIO.bcrypt,
+        salt = bcrypt.genSaltSync(5),
+        pass = bcrypt.hashSync($('#inputUserPass').val(), salt);
       userObject.password = pass;
 
       userObject.name = $('#inputUserCname').val();
@@ -136,6 +137,9 @@ $(document).ready(function() {
       userObject.emailVerified = $('#inputIsEmailVerified').prop('checked');
       userObject.sendMonthlyEmail = $('#inputIsSendMonthlyEmail')
         .prop('checked');
+
+      userObject._id = Users[index]._id;
+      userObject.upsert = !$('#inputIsRenameMode').prop('checked');
 
       $.post('/updateuser', {
         data: JSON.stringify(userObject),
@@ -159,7 +163,7 @@ $(document).ready(function() {
     $('.option.selected').removeClass('selected');
     $(this).addClass('selected');
     $('.dropdown-toggle .text').text($(this).text());
-    $('#right button').removeClass('disabled');
+    $('#right .change-buttons button').removeClass('disabled');
     index = $(this).data('id');
     $('#middle input[type=checkbox]').prop('checked', false);
     $.each($('#middle .random input[type=checkbox]'), function(i, opt) {
@@ -234,18 +238,20 @@ $(document).ready(function() {
   $('#inputUserName').on('change keyup', function() {
     var self = this;
     if ($(self).val()) {
-      $('#right button').removeClass('disabled');
-      $.each($('.option'), function() {
-        if ($(this).text() === $(self).val()) {
-          $('#markComplete').text('Save user');
-          return false;
-        } else {
-          $('#markComplete').text('Add user');
-          return true;
-        }
-      });
+      if (!$('#inputIsRenameMode').prop('checked')) {
+        $('#right .change-buttons button').removeClass('disabled');
+        $.each($('.option'), function() {
+          if ($(this).text() === $(self).val()) {
+            $('#markComplete').text('Save user');
+            return false;
+          } else {
+            $('#markComplete').text('Add user');
+            return true;
+          }
+        });
+      }
     } else {
-      $('#right button').addClass('disabled');
+      $('#right .change-buttons button').addClass('disabled');
     }
   });
 
