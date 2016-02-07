@@ -41,7 +41,7 @@ Therefore, I decided to write a project which will help to easily mark challenge
 <p align="center"><i><b>FCCUserEditor's initial state</b></i></p>
 Visually editor is divided into three parts. I call them simple. Left, middle and right :)
 On the left side you can see a dropdown menu which elements consist of FCC `username`s found in the DB. **To get started you have to click that dropdown and select a user you want to edit.**
-![](http://i.imgur.com/azXMyzP.png)
+![](http://i.imgur.com/C5a7cji.png)
 <p align="center"><i><b>FCCUserEditor's user interface</b></i></p>
 As result on the left side are now visible inputs which contain information fetched from the DB (the only inputs which are *required* are username, email and password inputs and password **is not** filled automatically). Loopback encrypts passwords in [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) and this project uses Daniel Wirtz's [bcrypt.js](https://github.com/dcodeIO/bcrypt.js) to encrypt entered passwords.
 
@@ -55,17 +55,19 @@ On the right side you see that buttons are now active:
  - `Clear cache` removes cached JSON files (see `/../FreeCodeCamp/seed/challenges/**/*.json`) from browser's localStorage.
  
 **Note:** if you want to reset all changes without saving just select the user from the dropdown menu.
-When you click any of `Save/Add user` or `Delete user` buttons the page will be reloaded.
-`Save user` button has two states. When `username` input's text is an existing `username` from the menu it is `Save user`. Otherwise it becomes `Add user` and clicking it will create a new user with the specified `username`. This means that, currently, changing user's `username` is not available. This is in To-Do list :) The workaround is creating a new user and removing the old one.
+
+`Save user` button has two states. When `username` input's text is an existing `username` from the menu it is `Save user`. Otherwise it becomes `Add user` and clicking it will create a new user with the specified `username`. If you checked the checkbox after `username` input `Save user` won't change it's title and clicking that button will **rename** selected user's username instead of creating a new user.
 
 ## To-Do
 ![](https://upload.wikimedia.org/wikipedia/commons/a/a7/Icon_yes.png) ~~Save fetched `JSON` files to `localStorage` and load from there when possible and add the logic to decide either load from `localStorage` or from local files (to have all changes (if such) made to original `JSON` files fetched).~~ **UPD**. `JSON` files are now cached in `localStorage` for one day. If you want to clear cache before new files are fetched automatically, click `Clear cache` button. You'll see a toast informing that cache is cleared (or an error occoured if there was an error while clearing the cache).
 
-![](http://i.imgur.com/DzitKa0.png) Add ability to change user's `username` (something like 'Rename mode' checkbox).
+![](https://upload.wikimedia.org/wikipedia/commons/a/a7/Icon_yes.png) ~~Add ability to change user's `username` (something like 'Rename mode' checkbox).~~
 
-![](http://i.imgur.com/DzitKa0.png) Make host, port, DB URL, `JSON` files path configurable. Make `/` something like a login page where user configures connection (and other settings, maybe). After clicking a button (`Continue`, `Submit` or `Apply` maybe) redirect to `/files`.
+![](http://i.imgur.com/DzitKa0.png) Make `/` something like a login page where user configures connection (and other settings, maybe). After clicking a button (`Continue`, `Submit` or `Apply` maybe) redirect to `/files`. Make host, port, DB URL, `JSON` files path, the state to rename checkbox, JSON files caching configurable. Save all these information to a configuration file (like `config.json`). Automatically load them from `config.json` if that file exists. Also make automatic configuration loading optional too (add a `Settings` page maybe).
 
 ![](http://i.imgur.com/DzitKa0.png) Better error handling (ex. `http://localhost:3005/files` will fail if DB is not available or there are no users in the DB).
+
+![](http://i.imgur.com/DzitKa0.png) Add abitliy to same defalut solution (if exists) from JSON file to the DB (smoething like a `Save default solutions to DB` checkbox).
 
 ![](https://upload.wikimedia.org/wikipedia/commons/a/a7/Icon_yes.png) ~~Add a notification if changes are/aren't saved successfully in the DB. [toastr](https://github.com/codeseven/toastr/) is a nice one.~~
 

@@ -53,12 +53,12 @@ $(document).ready(function() {
         _id: Users[index]._id,
         username: $('.option.selected').text()
       })
-        .done(function() {
-          toastr.success('User is successfully deleted from the DB!');
+        .done(function(data) {
+          toastr.success(data);
           updateUsernames();
         })
-        .fail(function() {
-          toastr.error('Some error occoured.');
+        .fail(function(data) {
+          toastr.error(data);
         });
     }
   });
@@ -79,7 +79,7 @@ $(document).ready(function() {
         toastr.success('Cache is successfully cleared!');
         $('#clearCache').addClass('disabled');
       } else {
-        toastr.error('An error occoured while clearing the cache.');
+        toastr.error('An error occurred while clearing the cache.');
       }
     }
   });
@@ -146,12 +146,12 @@ $(document).ready(function() {
         dataType: 'json',
         contentType: 'application/json'
       })
-        .done(function() {
-          toastr.success('DB information is successfully updated!');
+        .done(function(data) {
+          toastr.success(data);
           updateUsernames();
         })
-        .fail(function() {
-          toastr.error('Some error occoured.');
+        .fail(function(data) {
+          toastr.error(data);
         });
     }
   });

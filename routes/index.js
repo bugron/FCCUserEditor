@@ -18,11 +18,11 @@ router.post('/deleteuser', function(req, res) {
     '_id': ObjectID(userID)
   }, function(err) {
     if (err) {
-      res.status(404).send('There was a problem removing the information' +
-        'from the database.');
+      res.status(404).send('There is a problem removing ' + userName +
+        ' from the database.');
     } else {
-      res.status(200).send('The user ' + userName + ' was successfully ' +
-        'removed from the database!');
+      res.status(200).send(userName + ' is successfully removed from the ' +
+        'database!');
     }
   });
 });
@@ -59,11 +59,11 @@ router.post('/updateuser', function(req, res) {
 
   collection.update(searchObj, User, {upsert: newUser}, function(err) {
     if (err) {
-      res.status(404).send('There was a problem adding the information to ' +
-        'the database.');
+      res.status(404).send('There is a problem with ' +
+        (newUser ? 'adding ' : 'updating ') + User.username);
     } else {
-      res.status(200).send('We\'ve successfully updated the information ' +
-        'in the database!');
+      res.status(200).send(User.username + ' is successfully ' +
+        (newUser ? 'added' : 'updated') + '!');
     }
   });
 });
