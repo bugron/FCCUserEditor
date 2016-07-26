@@ -1,5 +1,131 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+    .row
+      .col-md-5.col-lg-5#left
+        h1.
+          Settings
+        .dropdown
+          button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+            span.text Click to select a user from the list
+            | 
+            span.caret
+          ul.dropdown-menu.select
+            each user, i in userList
+              li
+                a.option(href="#", data-id="#{i}")= user.username
+        .row.user-form
+          form.form-horizontal#formAddUser(name="adduser", method="post")
+            .form-group(style='padding-top:20px;')
+              .col-xs-4
+                .input-group
+                  input.form-control#inputUserName(type="text", placeholder="Username", name="username", pattern="^[a-z0-9]+$", required)
+                  label.input-group-addon
+                    input#inputIsRenameMode(type="checkbox", name="isRenameMode" title="Rename if checked instead of adding a new user", checked)
+              .col-xs-4
+                  input.form-control.bl#inputUserEmail(type="email", placeholder="Email", name="useremail", required)
+              .col-xs-4
+                input.form-control#inputUserPass(type="password", placeholder="Password" , name="userpassword", required)              
+            .form-group
+              .col-xs-4
+                input.form-control#inputUserCname(type="text", placeholder="Name", name="name")
+              .col-xs-4
+                input.form-control#inputUserGender(type="text", placeholder="Gender", name="usergender")
+              .col-xs-4
+                input.form-control#inputUserLocation(type="text", placeholder="Location", name="userlocation")
+            .form-group
+              .col-xs-12
+                input.form-control#inputUserPicture(type="text", placeholder="User's picture here", name="userpicture")
+            textarea.form-control#inputUserBio(placeholder="Biography", name="userbio")
+            .control-group
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsBanned(type="checkbox", name="isBanned")
+                    | Banned
+              .col-xs-5
+                .checkbox
+                  label
+                    input#inputIsCheater(type="checkbox", name="isCheater")
+                    | Cheater
+              .col-xs-4
+                .checkbox
+                  label
+                    input#inputIsHonest(type="checkbox", name="isHonest")
+                    | Honest
+            .control-group
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsGithubCool(type="checkbox", name="isGithubCool")
+                    | GithubCool
+              .col-xs-5
+                .checkbox
+                  label
+                    input#inputIsMigrationGrandfathered(type="checkbox", name="isMigrationGrandfathered")
+                    | MigrationGrandfathered
+              .col-xs-4
+                .checkbox
+                  label
+                    input#inputIsLocked(type="checkbox", name="isLocked")
+                    | Locked
+            .control-group
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsUniqMigrated(type="checkbox", name="isUniqMigrated")
+                    | UniqMigrated
+              .col-xs-5
+                .checkbox
+                  label
+                    input#inputIsBackEndCert(type="checkbox", name="isBackEndCert")
+                    | BackEndCert
+              .col-xs-4
+                .checkbox
+                  label
+                    input#inputIsFullStackCert(type="checkbox", name="isFullStackCert")
+                    | FullStackCert
+            .control-group
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsEmailVerified(type="checkbox", name="isEmailVerified")
+                    | emailVerified
+              .col-xs-5
+                .checkbox
+                  label
+                    input#inputIsSendMonthlyEmail(type="checkbox", name="isSendMonthlyEmail")
+                    | sendMonthlyEmail
+      .col-md-5.col-lg-5#middle
+        h1 Challenges
+        div#middle-float
+          - var x = 0
+          input#globalCheck(type='checkbox')
+          | 
+          a(data-toggle='collapse', data-parent='#accordion', href="#accordion") Check/uncheck all checkboxes
+          ul#accordion(class = "collapse map-collapse no-transition", style='list-style-type:none;padding-left:20px;')
+            each fileBlock, i in filelist
+              - x++;
+              li
+                input(type='checkbox')
+                | 
+                b
+                  a(data-toggle='collapse', data-parent='#accordion', href="#t#{x}")=i
+                ul(class = "collapse map-collapse no-transition", id='t#{x}', style='list-style-type:none;padding-left:20px;')
+                  each file, k in fileBlock
+                    li
+                      input(type='checkbox')
+                      | 
+                      a.clickFile(data-toggle='collapse', data-parent='#accordion', href='#')= file
+
+      .col-md-2.col-lg-2#right
+        div(style='margin-bottom:80px;')
+        .change-buttons
+          button.btn.btn-warning.btn-block.btn-md.disabled#markRandom Check random challenges
+          button.btn.btn-primary.btn-block.btn-md.disabled#markComplete(type='submit', form='formAddUser') Save user
+          button.btn.btn-danger.btn-block.btn-md.disabled#deleteUser Delete user
+        div(style='margin-top:80px;')
+        button.btn.btn-danger.btn-block.btn-md.disabled#clearCache(title='Remove cached JSON files from browser\'s localStorage') Clear cache
+
+    script.
+      var Users = !{JSON.stringify(userList)};

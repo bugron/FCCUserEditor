@@ -225,14 +225,12 @@ $(document).ready(function() {
   }
 
   $(document).on('click', '.option', listenOnChange);
-  $(document).on('change', '.dropdown', listenOnChange);
 
   // check/uncheck current and all children checkboxes
   $('#middle input[type=checkbox]').on('click', function() {
     var toCheck = '';
     if (($(this).prop('checked'))) {
       toCheck = 'checked';
-
     }
     $(this).parent().find('input[type=checkbox]').
       prop('checked', toCheck);

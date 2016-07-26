@@ -1,10 +1,56 @@
 var express = require('express'),
-    router = express.Router(),
-    ObjectID = require('monk').id;
+  router = express.Router(),
+  fs = require('fs'),
+  config = require('../config'),
+  ObjectID = require('monk').id;
 
 /* GET home page */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+router.get('/', function(req, res, next) {
+  var db = req.db,
+    collection = db.get('user');
+
+  collection.find({}, {fields: {password: 0}}, function(e, users) {
+    var fileObj;
+    fs.readdir(config.fccPath, function(err, files) {
+      if (err) {
+        return next(err);
+      }
+
+      fileObj = files.reduce(function(acc, curr) {
+        acc[curr] = fs.readdirSync(`${config.fccPath}/${curr}`);
+        return acc;
+      }, {});
+
+      return res.render('index', {
+        title: 'FCCUserEditor: Easily create/edit FCC user ' +
+          'objects for testing purposes',
+        userList: users.map(function(user) {
+          var map = user.challengeMap;
+          if (map) {
+            for (var id in map) {
+              if (map.hasOwnProperty(id) && map[id].solution) {
+                delete map[id].solution;
+              }
+            }
+          }
+          return user;
+        }),
+        filelist: fileObj
+      });
+    });
+  });
+});
+
+/* GET a seed file */
+router.get('/files/:filePath/:fileName', function(req, res, next) {
+  fs.readFile(`${config.fccPath}/${req.params.filePath}/${req.params.fileName}`,
+  'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    return res.json(data);
+  });
 });
 
 /* DELETE a User from DB */
@@ -32,7 +78,7 @@ router.post('/getusers', function(req, res) {
   var db = req.db,
     collection = db.get('user');
 
-  collection.find({}, {}, function(e, users) {
+  collection.find({}, {fields: {password: 0}}, function(e, users) {
     var namesObj = [];
     if (users.length) {
       namesObj = users;
