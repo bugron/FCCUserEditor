@@ -14,8 +14,6 @@ $(document).ready(function() {
 
   $('.user-form').hide();
   $('.option.selected').removeClass('selected');
-  $('#middle-float').css('overflow', 'auto');
-  $('#middle-float').css('height', '450px');
 
   $('#markRandom').on('click', function() {
     if (!$('#markRandom').hasClass('disabled')) {
@@ -194,8 +192,6 @@ $(document).ready(function() {
         }
       }
     });
-    // Bootstrap accordion needs this to work properly
-    $('.map-collapse').css('height', '100%');
     $('.collapse:not(".in")').addClass('in');
 
     if (Users[index].username === $(this).text()) {

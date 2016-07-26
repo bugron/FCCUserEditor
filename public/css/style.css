@@ -4,6 +4,15 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+#middle-float {
+  overflow: auto;
+  height: 450px;
+}
+
+.map-collapse {
+  height: 100%;
+}
+
 a {
   color: #00B7FF;
 }
