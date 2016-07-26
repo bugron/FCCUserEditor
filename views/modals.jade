@@ -1,0 +1,8 @@
+#delete-modal.modal(tabindex='-1')
+    .modal-dialog.animated.fadeIn.fast-animation
+        .modal-content
+            .modal-header.challenge-list-header Are you sure you want to delete this user?
+                a.close.closing-x(href='#', data-dismiss='modal', aria-hidden='true') ×
+            .modal-body.text-center
+                h3 If you click the button below user will be removed from the DB
+                a.btn.btn-lg.btn-danger.btn-block#deleteUser-modal DELETE

@@ -127,5 +127,7 @@ block content
         div(style='margin-top:80px;')
         button.btn.btn-danger.btn-block.btn-md.disabled#clearCache(title='Remove cached JSON files from browser\'s localStorage') Clear cache
 
+    include modals
+
     script.
       var Users = !{JSON.stringify(userList)};

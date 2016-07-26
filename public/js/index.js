@@ -48,6 +48,12 @@ $(document).ready(function() {
   });
 
   $('#deleteUser').click(function() {
+    if (!$('#deleteUser').hasClass('disabled')) {
+      $('#delete-modal').modal('show');
+    }
+  });
+
+  $('#deleteUser-modal').click(function() {
     if ($('.option.selected').length &&
         !$('#deleteUser').hasClass('disabled')
     ) {
@@ -61,6 +67,9 @@ $(document).ready(function() {
         })
         .fail(function(data) {
           toastr.error(data);
+        })
+        .always(function() {
+          $('#delete-modal').modal('hide');
         });
     }
   });
