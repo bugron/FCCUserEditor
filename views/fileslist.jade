@@ -21,11 +21,11 @@ block content
                 .input-group
                   input.form-control#inputUserName(type="text", placeholder="Username", name="username", pattern="^[a-z0-9]+$", required)
                   label.input-group-addon
-                    input#inputIsRenameMode(type="checkbox", name="isRenameMode" title="Rename if checked instead of adding a new user")
+                    input#inputIsRenameMode(type="checkbox", name="isRenameMode" title="Rename if checked instead of adding a new user", checked)
               .col-xs-4
                   input.form-control.bl#inputUserEmail(type="email", placeholder="Email", name="useremail", required)
               .col-xs-4
-                input.form-control#inputUserPass(type="text", placeholder="Password" , name="userpassword", required)              
+                input.form-control#inputUserPass(type="password", placeholder="Password" , name="userpassword", required)              
             .form-group
               .col-xs-4
                 input.form-control#inputUserCname(type="text", placeholder="Name", name="name")
@@ -128,31 +128,4 @@ block content
         button.btn.btn-danger.btn-block.btn-md.disabled#clearCache(title='Remove cached JSON files from browser\'s localStorage') Clear cache
 
     script.
-      function replaceSafeTags(value) {
-        return value
-          .replace(/fccss/gi, '<script>')
-          .replace(/fcces/gi, '</' + 'script>');
-      }
-
-      function replaceFccfaaAttr(value) {
-        return value.replace(/<form[^>]*>/, function(val) {
-          return val.replace(/fccfaa(\s*?)=/, 'action$1=');
-        });
-      }
-
-      function decodeTags(val) {
-        return replaceSafeTags(replaceFccfaaAttr(val));
-      }
-
       var Users = !{JSON.stringify(userList)};
-      Users = Users.map((user) => {
-        var map = user.challengeMap;
-        if (map) {
-          for (var id in map) {
-            if (map[id].solution) {
-              map[id].solution = decodeTags(map[id].solution);
-            }
-          }
-        }
-        return user;
-      });

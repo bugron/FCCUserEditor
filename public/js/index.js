@@ -92,7 +92,7 @@ $(document).ready(function() {
     ) {
       e.preventDefault();
       var userObject = {}, currObj = {}, currChallengeId;
-      userObject.completedChallenges = [];
+      // userObject.completedChallenges = [];
       userObject.challengeMap = {};
       userObject.progressTimestamps = [];
       $.each($('#middle .random input[type=checkbox]:checked'),
@@ -104,7 +104,7 @@ $(document).ready(function() {
           currObj.id = currChallengeId;
           currObj.challengeType = $(checkbox).data('type');
           userObject.challengeMap[currChallengeId] = currObj;
-          userObject.completedChallenges.push(currObj);
+          // userObject.completedChallenges.push(currObj);
           currObj = {};
           currObj.timestamp = Date.now();
           currObj.completedChallenge = currChallengeId;
@@ -178,11 +178,11 @@ $(document).ready(function() {
     index = $(this).data('id');
     $('#middle input[type=checkbox]').prop('checked', false);
     $.each($('#middle .random input[type=checkbox]'), function(i, opt) {
-      if (Users[index].completedChallenges) {
-        for (var k = 0; k < Users[index].completedChallenges.length; k++) {
+      if (Users[index].challengeMap) {
+        for (var id in Users[index].challengeMap) {
           if (
-            Users[index].completedChallenges[k].name ===
-            $(opt).next('a').text()
+            Users[index].challengeMap.hasOwnProperty(id) &&
+            Users[index].challengeMap[id].name === $(opt).next('a').text()
           ) {
             $(opt).prop('checked', true);
             break;
@@ -291,11 +291,12 @@ $(document).ready(function() {
         var ul = $(ulElem);
         for (var i = 0; i < currFile.challenges.length; i++) {
           var checked = '';
-          if (index !== -1 && Users[index].completedChallenges) {
-            for (var k = 0; k < Users[index].completedChallenges.length; k++) {
+          if (index !== -1 && Users[index].challengeMap) {
+            for (var id in Users[index].challengeMap) {
               if (
-                Users[index].completedChallenges[k].name ===
-                currFile.challenges[i].title
+                Users[index].challengeMap.hasOwnProperty(id) &&
+                Users[index].challengeMap[id].name ===
+                  currFile.challenges[i].title
               ) {
                 checked = 'checked="checked"';
                 break;

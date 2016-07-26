@@ -32,26 +32,10 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 
-function replaceScriptTags(value) {
-  return value
-    .replace(/<script>/gi, 'fccss')
-    .replace(/<\/script>/gi, 'fcces');
-}
-
-function replaceFormAction(value) {
-  return value.replace(/<form[^>]*>/, function(val) {
-    return val.replace(/action(\s*?)=/, 'fccfaa$1=');
-  });
-}
-
-function encodeTags(val) {
-  return replaceScriptTags(replaceFormAction(val));
-}
-
 app.get('/files', function(req, res, next) {
   var db = req.db;
   var collection = db.get('user');
-  collection.find({}, {}, function(e, users) {
+  collection.find({}, {fields: {password: 0}}, function(e, users) {
     var fileObj;
     fs.readdir(config.fccPath, function(err, files) {
       if (err) {
@@ -63,14 +47,15 @@ app.get('/files', function(req, res, next) {
         return acc;
       }, {});
 
-      res.render('fileslist', {
-        title: 'FCCUserEditor: Easily create/edit FCC user objects for testing purposes',
-        userList: users.map((user) => {
+      return res.render('fileslist', {
+        title: 'FCCUserEditor: Easily create/edit FCC user ' +
+          'objects for testing purposes',
+        userList: users.map(function(user) {
           var map = user.challengeMap;
           if (map) {
             for (var id in map) {
-              if (map[id].solution) {
-                map[id].solution = encodeTags(map[id].solution);
+              if (map.hasOwnProperty(id) && map[id].solution) {
+                delete map[id].solution;
               }
             }
           }
