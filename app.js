@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(favicon([__dirname, '/public/favicon.ico'].join('')));
+app.use(favicon(path.join(__dirname, '/public/favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -57,28 +57,25 @@ app.get('/files', function(req, res, next) {
       if (err) {
         return next(err);
       }
+
       fileObj = files.reduce(function(acc, curr) {
-        if (!curr.match(/hikes/gi)) {
-          acc[curr] = fs.readdirSync(`${config.fccPath}/${curr}`);
-        }
+        acc[curr] = fs.readdirSync(`${config.fccPath}/${curr}`);
         return acc;
       }, {});
 
-      var length = users.length;
-      for (var i = 0; i < length; i++) {
-        if (users[i].completedChallenges &&
-          users[i].completedChallenges.length > 0
-        ) {
-          for (var k = 0; k < users[i].completedChallenges.length; k++) {
-            if (users[i].completedChallenges[k].solution) {
-              users[i].completedChallenges[k].solution =
-                encodeTags(users[i].completedChallenges[k].solution);
+      res.render('fileslist', {
+        title: 'FCCUserEditor: Easily create/edit FCC user objects for testing purposes',
+        userList: users.map((user) => {
+          var map = user.challengeMap;
+          if (map) {
+            for (var id in map) {
+              if (map[id].solution) {
+                map[id].solution = encodeTags(map[id].solution);
+              }
             }
           }
-        }
-      }
-      res.render('fileslist', {
-        userList: users,
+          return user;
+        }),
         filelist: fileObj
       });
     });
@@ -87,8 +84,7 @@ app.get('/files', function(req, res, next) {
 
 app.get('/files/:filePath/:fileName', function(req, res, next) {
   fs.readFile(`${config.fccPath}/${req.params.filePath}/${req.params.fileName}`,
-  'utf8',
-  (err, data) => {
+  'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return next(err);
@@ -128,4 +124,8 @@ app.use(function(err, req, res) {
   });
 });
 
-module.exports = app;
+app.set('port', process.env.PORT || 3005);
+
+app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + app.get('port'));
+});

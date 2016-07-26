@@ -1,11 +1,11 @@
 $(document).ready(function() {
   toastr.options = {
-    'closeButton': true,
-    'newestOnTop': true,
-    'progressBar': true,
-    'positionClass': 'toast-bottom-right',
-    'preventDuplicates': true,
-    'timeOut': '4000'
+    closeButton: true,
+    newestOnTop: true,
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: true,
+    timeOut: '4000'
   };
 
   JSONCache.settings.debug = false;
@@ -14,8 +14,8 @@ $(document).ready(function() {
 
   $('.user-form').hide();
   $('.option.selected').removeClass('selected');
-  $('#middle').css('overflow', 'auto');
-  $('#middle').css('height', '500px');
+  $('#middle-float').css('overflow', 'auto');
+  $('#middle-float').css('height', '450px');
 
   $('#markRandom').on('click', function() {
     if (!$('#markRandom').hasClass('disabled')) {
@@ -91,21 +91,23 @@ $(document).ready(function() {
         !$('#markComplete').hasClass('disabled')
     ) {
       e.preventDefault();
-      var userObject = {}, currObj = {}, challengeType;
+      var userObject = {}, currObj = {}, currChallengeId;
       userObject.completedChallenges = [];
+      userObject.challengeMap = {};
       userObject.progressTimestamps = [];
       $.each($('#middle .random input[type=checkbox]:checked'),
         function(i, checkbox) {
-          challengeType = $(checkbox).data('type');
+          currChallengeId = $(checkbox).data('id');
           currObj.completedDate = Date.now();
           currObj.verified = true;
           currObj.name = $(checkbox).next('a').text();
-          currObj.id = $(checkbox).data('id');
-          currObj.challengeType = challengeType;
+          currObj.id = currChallengeId;
+          currObj.challengeType = $(checkbox).data('type');
+          userObject.challengeMap[currChallengeId] = currObj;
           userObject.completedChallenges.push(currObj);
           currObj = {};
           currObj.timestamp = Date.now();
-          currObj.completedChallenge = $(checkbox).data('id');
+          currObj.completedChallenge = currChallengeId;
           userObject.progressTimestamps.push(currObj);
           currObj = {};
       });
@@ -134,6 +136,15 @@ $(document).ready(function() {
       userObject.isUniqMigrated = $('#inputIsUniqMigrated').prop('checked');
       userObject.isBackEndCert = $('#inputIsBackEndCert').prop('checked');
       userObject.isFullStackCert = $('#inputIsFullStackCert').prop('checked');
+      userObject.isChallengeMapMigrated = true;
+      userObject.picture = $('#inputUserPicture').val() ||
+        'https://s3.amazonaws.com/freecodecamp/camper-image-placeholder.png';
+      userObject.currentStreak = 0;
+      userObject.longestStreak = 0;
+      userObject.rand = Math.random();
+      userObject.timezone = 'Asia/Dubai';
+      userObject.theme = 'default';
+      userObject.languageTag = 'en';
       userObject.emailVerified = $('#inputIsEmailVerified').prop('checked');
       userObject.sendMonthlyEmail = $('#inputIsSendMonthlyEmail')
         .prop('checked');
@@ -187,6 +198,7 @@ $(document).ready(function() {
       // fill all inputs from a user object
       $('#inputUserName').val(Users[index].username);
       $('#inputUserEmail').val(Users[index].email);
+      $('#inputUserPicture').val(Users[index].picture);
       // $('#inputUserPass').val(Users[index].password);
       $('#inputUserCname').val(Users[index].name);
       $('#inputUserGender').val(Users[index].gender);
@@ -213,6 +225,7 @@ $(document).ready(function() {
   }
 
   $(document).on('click', '.option', listenOnChange);
+  $(document).on('change', '.dropdown', listenOnChange);
 
   // check/uncheck current and all children checkboxes
   $('#middle input[type=checkbox]').on('click', function() {
@@ -236,12 +249,22 @@ $(document).ready(function() {
 
   // check if we're going to save a user or to ADD a user
   $('#inputUserName').on('change keyup', function() {
+    var msg = '';
+    if (this.validity.patternMismatch) {
+      msg = 'Username must be lowercase and contain only alphanumeric ' +
+        'characters!';
+    }
+    this.setCustomValidity(msg);
+
     var self = this;
     if ($(self).val()) {
       if (!$('#inputIsRenameMode').prop('checked')) {
         $('#right .change-buttons button').removeClass('disabled');
         $.each($('.option'), function() {
-          if ($(this).text() === $(self).val()) {
+          if (
+            $(this).text() === $(self).val() &&
+            !$('#inputIsRenameMode').prop('checked')
+          ) {
             $('#markComplete').text('Save user');
             return false;
           } else {
@@ -262,8 +285,7 @@ $(document).ready(function() {
   $.each(files, function(i, File) {
     var fileTitle = $(File).text();
     var fileDirectory = $(File).parents('ul').prev('b').find('a').text();
-    JSONCache.getCachedJSON(`/files/${fileDirectory}/${fileTitle}`,
-    {
+    JSONCache.getCachedJSON(`/files/${fileDirectory}/${fileTitle}`, {
       success: function(file) {
         var currFile = JSON.parse(file);
         var ul = $(ulElem);

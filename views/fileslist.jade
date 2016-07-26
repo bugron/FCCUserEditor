@@ -4,7 +4,7 @@ block content
     .row
       .col-md-5.col-lg-5#left
         h1.
-          Choose a user to get started
+          Settings
         .dropdown
           button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
             span.text Click to select a user from the list
@@ -17,18 +17,15 @@ block content
         .row.user-form
           form.form-horizontal#formAddUser(name="adduser", method="post")
             .form-group(style='padding-top:20px;')
-              .col-xs-6
+              .col-xs-4
                 .input-group
-                  input.form-control#inputUserName(type="text", placeholder="Username", name="username", required)
+                  input.form-control#inputUserName(type="text", placeholder="Username", name="username", pattern="^[a-z0-9]+$", required)
                   label.input-group-addon
                     input#inputIsRenameMode(type="checkbox", name="isRenameMode" title="Rename if checked instead of adding a new user")
-              .col-xs-6
-                .input-group
-                  span.input-group-addon @
+              .col-xs-4
                   input.form-control.bl#inputUserEmail(type="email", placeholder="Email", name="useremail", required)
-            .form-group
-              .col-xs-12
-                input.form-control#inputUserPass(type="text", placeholder="Password" , name="userpassword", required)
+              .col-xs-4
+                input.form-control#inputUserPass(type="text", placeholder="Password" , name="userpassword", required)              
             .form-group
               .col-xs-4
                 input.form-control#inputUserCname(type="text", placeholder="Name", name="name")
@@ -36,8 +33,11 @@ block content
                 input.form-control#inputUserGender(type="text", placeholder="Gender", name="usergender")
               .col-xs-4
                 input.form-control#inputUserLocation(type="text", placeholder="Location", name="userlocation")
-            textarea.form-control#inputUserBio(placeholder="Biography", name="userbio")
             .form-group
+              .col-xs-12
+                input.form-control#inputUserPicture(type="text", placeholder="User's picture here", name="userpicture")
+            textarea.form-control#inputUserBio(placeholder="Biography", name="userbio")
+            .control-group
               .col-xs-3
                 .checkbox
                   label
@@ -53,7 +53,7 @@ block content
                   label
                     input#inputIsHonest(type="checkbox", name="isHonest")
                     | Honest
-            .form-group
+            .control-group
               .col-xs-3
                 .checkbox
                   label
@@ -69,7 +69,7 @@ block content
                   label
                     input#inputIsLocked(type="checkbox", name="isLocked")
                     | Locked
-            .form-group
+            .control-group
               .col-xs-3
                 .checkbox
                   label
@@ -85,7 +85,7 @@ block content
                   label
                     input#inputIsFullStackCert(type="checkbox", name="isFullStackCert")
                     | FullStackCert
-            .form-group
+            .control-group
               .col-xs-3
                 .checkbox
                   label
@@ -97,25 +97,26 @@ block content
                     input#inputIsSendMonthlyEmail(type="checkbox", name="isSendMonthlyEmail")
                     | sendMonthlyEmail
       .col-md-5.col-lg-5#middle
-        h1 User's challenges
-        - var x = 0
-        input#globalCheck(type='checkbox')
-        | 
-        a(data-toggle='collapse', data-parent='#accordion', href="#accordion") Check/uncheck all checkboxes
-        ul#accordion(class = "collapse map-collapse no-transition", style='list-style-type:none;padding-left:20px;')
-          each fileBlock, i in filelist
-            - x++;
-            li
-              input(type='checkbox')
-              | 
-              b
-                a(data-toggle='collapse', data-parent='#accordion', href="#t#{x}")=i
-              ul(class = "collapse map-collapse no-transition", id='t#{x}', style='list-style-type:none;padding-left:20px;')
-                each file, k in fileBlock
-                  li
-                    input(type='checkbox')
-                    | 
-                    a.clickFile(data-toggle='collapse', data-parent='#accordion', href='#')= file
+        h1 Challenges
+        div#middle-float
+          - var x = 0
+          input#globalCheck(type='checkbox')
+          | 
+          a(data-toggle='collapse', data-parent='#accordion', href="#accordion") Check/uncheck all checkboxes
+          ul#accordion(class = "collapse map-collapse no-transition", style='list-style-type:none;padding-left:20px;')
+            each fileBlock, i in filelist
+              - x++;
+              li
+                input(type='checkbox')
+                | 
+                b
+                  a(data-toggle='collapse', data-parent='#accordion', href="#t#{x}")=i
+                ul(class = "collapse map-collapse no-transition", id='t#{x}', style='list-style-type:none;padding-left:20px;')
+                  each file, k in fileBlock
+                    li
+                      input(type='checkbox')
+                      | 
+                      a.clickFile(data-toggle='collapse', data-parent='#accordion', href='#')= file
 
       .col-md-2.col-lg-2#right
         div(style='margin-bottom:80px;')
@@ -144,16 +145,14 @@ block content
       }
 
       var Users = !{JSON.stringify(userList)};
-      var length = Users.length;
-      for (var i = 0; i < length; i++) {
-        if (Users[i].completedChallenges &&
-          Users[i].completedChallenges.length > 0
-        ) {
-          for (var k = 0; k < Users[i].completedChallenges.length; k++) {
-            if (Users[i].completedChallenges[k].solution) {
-              Users[i].completedChallenges[k].solution =
-                decodeTags(Users[i].completedChallenges[k].solution);
+      Users = Users.map((user) => {
+        var map = user.challengeMap;
+        if (map) {
+          for (var id in map) {
+            if (map[id].solution) {
+              map[id].solution = decodeTags(map[id].solution);
             }
           }
         }
-      }
+        return user;
+      });

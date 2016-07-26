@@ -1,6 +1,6 @@
 {
-  "ecmaFeatures": {
-    "jsx": true
+  "parserOption": {
+    "ecmaVersion": 6
   },
   "env": {
     "browser": true,
@@ -9,6 +9,7 @@
   },
   "parser": "babel-eslint",
   "globals": {
+    "Promise": true,
     "window": true,
     "$": true,
     "jQuery": true,
@@ -58,7 +59,6 @@
     "no-caller": 2,
     "no-div-regex": 2,
     "no-else-return": 0,
-    "no-empty-label": 2,
     "no-eq-null": 1,
     "no-eval": 2,
     "no-extend-native": 2,
@@ -171,7 +171,7 @@
     "one-var": 0,
     "operator-assignment": 0,
     "padded-blocks": 0,
-    "quote-props": 0,
+    "quote-props": [2, "as-needed"],
     "quotes": [
       2,
       "single",
@@ -182,10 +182,7 @@
       "always"
     ],
     "sort-vars": 0,
-    "space-after-keywords": [
-      2,
-      "always"
-    ],
+    "keyword-spacing": [ 2 ],
     "space-before-function-paren": [
       2,
       "never"
@@ -197,7 +194,6 @@
     "space-in-brackets": 0,
     "space-in-parens": 0,
     "space-infix-ops": 2,
-    "space-return-throw-case": 2,
     "space-unary-ops": [
       1,
       {
@@ -214,7 +210,7 @@
 
     "max-depth": 0,
     "max-len": [
-      1,
+      2,
       80,
       2
     ],

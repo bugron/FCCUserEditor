@@ -1,6 +1,6 @@
 var express = require('express'),
     router = express.Router(),
-    ObjectID = require('mongodb').ObjectID;
+    ObjectID = require('monk').id;
 
 /* GET home page */
 router.get('/', function(req, res) {
@@ -15,7 +15,7 @@ router.post('/deleteuser', function(req, res) {
     collection = db.get('user');
 
   collection.remove({
-    '_id': ObjectID(userID)
+    _id: ObjectID(userID)
   }, function(err) {
     if (err) {
       res.status(404).send('There is a problem removing ' + userName +
@@ -53,7 +53,7 @@ router.post('/updateuser', function(req, res) {
     searchObj = {username: User.username};
     delete User._id;
   } else {
-    searchObj = {'_id': ObjectID(User._id)};
+    searchObj = {_id: ObjectID(User._id)};
   }
   delete User.upsert;
 
