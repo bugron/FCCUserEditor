@@ -137,14 +137,12 @@ $(document).ready(function() {
       userObject.location = $('#inputUserLocation').val();
       userObject.bio = $('#inputUserBio').val();
 
-      userObject.isBanned = $('#inputIsBanned').prop('checked');
       userObject.isCheater = $('#inputIsCheater').prop('checked');
       userObject.isHonest = $('#inputIsHonest').prop('checked');
       userObject.isLocked = $('#inputIsLocked').prop('checked');
       userObject.isGithubCool = $('#inputIsGithubCool').prop('checked');
-      userObject.isMigrationGrandfathered = $('#inputIsMigrationGrandfathered')
-        .prop('checked');
-      userObject.isUniqMigrated = $('#inputIsUniqMigrated').prop('checked');
+      userObject.isFrontEndCert = $('#inputIsFrontEndCert').prop('checked');
+      userObject.isDataVisCert = $('#inputIsDataVisCert').prop('checked');
       userObject.isBackEndCert = $('#inputIsBackEndCert').prop('checked');
       userObject.isFullStackCert = $('#inputIsFullStackCert').prop('checked');
       userObject.isChallengeMapMigrated = true;
@@ -154,10 +152,12 @@ $(document).ready(function() {
       userObject.longestStreak = 0;
       userObject.rand = Math.random();
       userObject.timezone = 'Asia/Dubai';
-      userObject.theme = 'default';
+      userObject.theme = $('input[name=nightMode]:checked').val() || 'default';
       userObject.languageTag = 'en';
       userObject.emailVerified = $('#inputIsEmailVerified').prop('checked');
       userObject.sendMonthlyEmail = $('#inputIsSendMonthlyEmail')
+        .prop('checked');
+      userObject.sendQuincyEmail = $('#inputIsSendQuincyEmail')
         .prop('checked');
 
       userObject._id = Users[index]._id;
@@ -214,20 +214,20 @@ $(document).ready(function() {
       $('#inputUserLocation').val(Users[index].location);
       $('#inputUserBio').val(Users[index].bio);
 
-      $('#inputIsBanned').prop('checked', !!Users[index].isBanned);
       $('#inputIsCheater').prop('checked', !!Users[index].isCheater);
       $('#inputIsHonest').prop('checked', !!Users[index].isHonest);
       $('#inputIsLocked').prop('checked', !!Users[index].isLocked);
       $('#inputIsGithubCool').prop('checked', !!Users[index].isGithubCool);
-      $('#inputIsMigrationGrandfathered').prop('checked',
-        !!Users[index].isMigrationGrandfathered);
-      $('#inputIsUniqMigrated').prop('checked', !!Users[index].isUniqMigrated);
+      $('#inputIsFrontEndCert').prop('checked', !!Users[index].isFrontEndCert);
+      $('#inputIsDataVisCert').prop('checked', !!Users[index].isDataVisCert);
       $('#inputIsBackEndCert').prop('checked', !!Users[index].isBackEndCert);
       $('#inputIsFullStackCert').prop('checked',
         !!Users[index].isFullStackCert);
       $('#inputIsEmailVerified').prop('checked', !!Users[index].emailVerified);
       $('#inputIsSendMonthlyEmail').prop('checked',
         !!Users[index].sendMonthlyEmail);
+      $('#inputIsSendQuincyEmail').prop('checked',
+        !!Users[index].sendQuincyEmail);
     }
     // show all user inputs
     $('.user-form').show();

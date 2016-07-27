@@ -41,46 +41,40 @@ block content
               .col-xs-3
                 .checkbox
                   label
-                    input#inputIsBanned(type="checkbox", name="isBanned")
-                    | Banned
-              .col-xs-5
+                    input#inputIsLocked(type="checkbox", name="isLocked")
+                    | Locked
+              .col-xs-3
                 .checkbox
                   label
                     input#inputIsCheater(type="checkbox", name="isCheater")
                     | Cheater
-              .col-xs-4
+              .col-xs-3
                 .checkbox
                   label
                     input#inputIsHonest(type="checkbox", name="isHonest")
                     | Honest
-            .control-group
               .col-xs-3
                 .checkbox
                   label
                     input#inputIsGithubCool(type="checkbox", name="isGithubCool")
                     | GithubCool
-              .col-xs-5
-                .checkbox
-                  label
-                    input#inputIsMigrationGrandfathered(type="checkbox", name="isMigrationGrandfathered")
-                    | MigrationGrandfathered
-              .col-xs-4
-                .checkbox
-                  label
-                    input#inputIsLocked(type="checkbox", name="isLocked")
-                    | Locked
             .control-group
               .col-xs-3
                 .checkbox
                   label
-                    input#inputIsUniqMigrated(type="checkbox", name="isUniqMigrated")
-                    | UniqMigrated
-              .col-xs-5
+                    input#inputIsFrontEndCert(type="checkbox", name="isFrontEndCert")
+                    | FrontEndCert
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsDataVisCert(type="checkbox", name="isDataVisCert")
+                    | DataVisCert
+              .col-xs-3
                 .checkbox
                   label
                     input#inputIsBackEndCert(type="checkbox", name="isBackEndCert")
                     | BackEndCert
-              .col-xs-4
+              .col-xs-3
                 .checkbox
                   label
                     input#inputIsFullStackCert(type="checkbox", name="isFullStackCert")
@@ -91,11 +85,25 @@ block content
                   label
                     input#inputIsEmailVerified(type="checkbox", name="isEmailVerified")
                     | emailVerified
-              .col-xs-5
+              .col-xs-3
                 .checkbox
                   label
                     input#inputIsSendMonthlyEmail(type="checkbox", name="isSendMonthlyEmail")
                     | sendMonthlyEmail
+              .col-xs-3
+                .checkbox
+                  label
+                    input#inputIsSendQuincyEmail(type="checkbox", name="isSendQuincyEmail")
+                    | sendQuincyEmail
+            .control-group
+              .col-xs-12
+                b Night Mode:&nbsp;
+                label
+                  input(type="radio", name="nightMode" value="default" checked)
+                  | &nbsp;default&nbsp;
+                label
+                  input(type="radio", name="nightMode" value="night")
+                  | &nbsp;night
       .col-md-5.col-lg-5#middle
         h1 Challenges
         div#middle-float
