@@ -13,7 +13,7 @@ block content
           ul.dropdown-menu.select
             each user, i in userList
               li
-                a.option(href="#", data-id="#{i}")= user.username
+                a.option(href="#", data-id=i)= user.username
         .row.user-form
           form.form-horizontal#formAddUser(name="adduser", method="post")
             .form-group(style='padding-top:20px;')
@@ -110,8 +110,8 @@ block content
                 input(type='checkbox')
                 | 
                 b
-                  a(data-toggle='collapse', data-parent='#accordion', href="#t#{x}")=i
-                ul(class = "collapse map-collapse no-transition", id='t#{x}', style='list-style-type:none;padding-left:20px;')
+                  a(data-toggle='collapse', data-parent='#accordion', href=`#t${x}`)=i
+                ul(class = "collapse map-collapse no-transition", id=`t${x}`, style='list-style-type:none;padding-left:20px;')
                   each file, k in fileBlock
                     li
                       input(type='checkbox')
