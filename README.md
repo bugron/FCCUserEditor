@@ -2,7 +2,9 @@
 
 This project has been written as an introduction to Node.js, MongoDB and Express based apps.
 
-*Based on Christopher Buecheler's [sample project](https://github.com/cwbuecheler/node-tutorial-for-frontend-devs). Also here I've used code portions from FreeCodeCamp's [COM100]() challenge editor. And Contributing guidelines are from [FreeCodeCamp](https://github.com/FreeCodeCamp/FreeCodeCamp).*
+**IMPORTANT!**: Use this tool ONLY to create new users and edit them because currently it removes all solutions and your user's progress will be lost!
+
+*Based on Christopher Buecheler's [sample project](https://github.com/cwbuecheler/node-tutorial-for-frontend-devs). Also here I've used code portions from FreeCodeCamp's [COM1000](https://github.com/FreeCodeCamp/COM1000) challenge editor. And Contributing guidelines are from [FreeCodeCamp](https://github.com/FreeCodeCamp/FreeCodeCamp).*
 
 ### Table of contents
 1. [About the project](#user-content-about-the-project)
@@ -30,18 +32,16 @@ Therefore, I decided to write a project which will help to easily mark challenge
 2. `<yourFCC_FOLDER_NAME>` is whatever you named your Free Code Camp repository locally (see `freecodecamp` above).
   * `echo 'FCC_FOLDER_NAME = "<yourFCC_FOLDER_NAME>"' >> .env`
 3. Install dependencies: `npm install` and `bower install`.
-
-  3.1 Unfortunately, [JSONCache](https://github.com/kpuputti/JSONCache) hasn't a bower package so you have to manually download `jsoncache-0.1.0.min.js` to `/public/bower_components/JSONCache`(JSONCache will be replaced in future, maybe).
 4. **IMPORTANT!**: Make sure you have `mongod` running and FreeCodeCamp's DB is located at `localhost:27017/freecodecamp`.
-5. In your cloned repository's folder run: `npm start`. By default It will start serving at `http://localhost:3005`.
+5. In your cloned repository's folder run: `npm start`. By default it will start serving at `http://localhost:3005`.
 6. Go to `http://localhost:3005/files` to start using the editor.
 
 ## How to use FCCUserEditor?
-![](http://i.imgur.com/PrVOF1K.png)
+![](http://image.prntscr.com/image/f5182f09b7c04d6ea17ba88dc4c28dae.png)
 <p align="center"><i><b>FCCUserEditor's initial state</b></i></p>
 Visually editor is divided into three parts. I call them simple. Left, middle and right :)
 On the left side you can see a dropdown menu which elements consist of FCC `username`s found in the DB. **To get started you have to click that dropdown and select a user you want to edit.**
-![](http://i.imgur.com/C5a7cji.png)
+![](http://image.prntscr.com/image/b277c6362eb343229f0110f0880981ea.png)
 <p align="center"><i><b>FCCUserEditor's user interface</b></i></p>
 As result on the left side are now visible inputs which contain information fetched from the DB (the only inputs which are *required* are username, email and password inputs and password **is not** filled automatically). Loopback encrypts passwords in [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) and this project uses Daniel Wirtz's [bcrypt.js](https://github.com/dcodeIO/bcrypt.js) to encrypt entered passwords.
 
@@ -65,9 +65,9 @@ On the right side you see that buttons are now active:
 
 ![](http://i.imgur.com/DzitKa0.png) Make `/` something like a login page where user configures connection (and other settings, maybe). After clicking a button (`Continue`, `Submit` or `Apply` maybe) redirect to `/files`. Make host, port, DB URL, `JSON` files path, the state to rename checkbox, JSON files caching configurable. Save all these information to a configuration file (like `config.json`). Automatically load them from `config.json` if that file exists. Also make automatic configuration loading optional too (add a `Settings` page maybe).
 
-![](http://i.imgur.com/DzitKa0.png) Better error handling (ex. `http://localhost:3005/files` will fail if DB is not available or there are no users in the DB).
+![](http://i.imgur.com/DzitKa0.png) Better error handling (ex. `http://localhost:3005` will fail if DB is not available or there are no users in the DB).
 
-![](http://i.imgur.com/DzitKa0.png) Add abitliy to same defalut solution (if exists) from JSON file to the DB (smoething like a `Save default solutions to DB` checkbox).
+![](http://i.imgur.com/DzitKa0.png) Add abitliy to save defalut solution (if exists) from JSON file to the DB (something like a `Save default solutions to DB` checkbox).
 
 ![](https://upload.wikimedia.org/wikipedia/commons/a/a7/Icon_yes.png) ~~Add a notification if changes are/aren't saved successfully in the DB. [toastr](https://github.com/codeseven/toastr/) is a nice one.~~
 
