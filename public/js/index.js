@@ -159,6 +159,8 @@ $(document).ready(function() {
         .prop('checked');
       userObject.sendQuincyEmail = $('#inputIsSendQuincyEmail')
         .prop('checked');
+      userObject.sendNotificationEmail = $('#inputIsSendNotificationEmail')
+        .prop('checked');
 
       userObject._id = Users[index]._id;
       userObject.upsert = !$('#inputIsRenameMode').prop('checked');
@@ -228,6 +230,8 @@ $(document).ready(function() {
         !!Users[index].sendMonthlyEmail);
       $('#inputIsSendQuincyEmail').prop('checked',
         !!Users[index].sendQuincyEmail);
+      $('#inputIsSendNotificationEmail').prop('checked',
+        !!Users[index].sendNotificationEmail);
     }
     // show all user inputs
     $('.user-form').show();

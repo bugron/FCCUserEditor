@@ -27,77 +27,80 @@ block content
               .col-xs-4
                 input.form-control#inputUserPass(type="password", placeholder="Password" , name="userpassword", required)              
             .form-group
-              .col-xs-4
-                input.form-control#inputUserCname(type="text", placeholder="Name", name="name")
-              .col-xs-4
-                input.form-control#inputUserGender(type="text", placeholder="Gender", name="usergender")
-              .col-xs-4
-                input.form-control#inputUserLocation(type="text", placeholder="Location", name="userlocation")
+              .col-xs-6
+                input.form-control#inputUserCname(type="text", placeholder="Name", name="name" title="Your name that you'll see on your certification and on your profile page. Is pulled from your GitHub account.")
+              .col-xs-6
+                input.form-control#inputUserLocation(type="text", placeholder="Location", name="userlocation" title="Your location you'll see on your profile page. Is pulled from your GitHub account.")
             .form-group
               .col-xs-12
-                input.form-control#inputUserPicture(type="text", placeholder="User's picture here", name="userpicture")
-            textarea.form-control#inputUserBio(placeholder="Biography", name="userbio")
+                input.form-control#inputUserPicture(type="text", placeholder="User's picture here", name="userpicture" title="Your FreeCodeCamp profile picture. Is pulled from your GitHub account.")
+            textarea.form-control#inputUserBio(placeholder="Biography", name="userbio" title="Your bio you'll see on your profile page. Is pulled from your GitHub account.")
             .control-group
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this makes user's profile private so others can't view it.")
                     input#inputIsLocked(type="checkbox", name="isLocked")
                     | Locked
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this makes a user cheater. A message is show on every page for such a camper.")
                     input#inputIsCheater(type="checkbox", name="isCheater")
                     | Cheater
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates if user has agreed FreeCodeCamp Academic Honesty Pledge. This is mandatory for getting any FCC certificate.")
                     input#inputIsHonest(type="checkbox", name="isHonest")
                     | Honest
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user has a GitHub accout associated with his/her FCC account. This is mandatory if user wants others to be able to view their certificate.")
                     input#inputIsGithubCool(type="checkbox", name="isGithubCool")
                     | GithubCool
             .control-group
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user is Front End certified")
                     input#inputIsFrontEndCert(type="checkbox", name="isFrontEndCert")
                     | FrontEndCert
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user is Data Visualization certified")
                     input#inputIsDataVisCert(type="checkbox", name="isDataVisCert")
                     | DataVisCert
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user is Back End certified")
                     input#inputIsBackEndCert(type="checkbox", name="isBackEndCert")
                     | BackEndCert
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user is Full Stack certified")
                     input#inputIsFullStackCert(type="checkbox", name="isFullStackCert")
                     | FullStackCert
             .control-group
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this indicates that user have verified email.")
                     input#inputIsEmailVerified(type="checkbox", name="isEmailVerified")
                     | emailVerified
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this means user wants to recieve monthly announcement emails")
                     input#inputIsSendMonthlyEmail(type="checkbox", name="isSendMonthlyEmail")
                     | sendMonthlyEmail
               .col-xs-3
                 .checkbox
-                  label
+                  label(title="Checking this means user wants to recieve weekly emails from Quincy Larson")
                     input#inputIsSendQuincyEmail(type="checkbox", name="isSendQuincyEmail")
                     | sendQuincyEmail
+              .col-xs-3
+                .checkbox
+                  label(title="Checking this means user wants to recieve notification emails")
+                    input#inputIsSendNotificationEmail(type="checkbox", name="isSendNotificationEmail")
+                    | sendNotificationEmail
             .control-group
               .col-xs-12
-                b Night Mode:&nbsp;
+                b Choose FCC UI for the user:&nbsp;
                 label
                   input(type="radio", name="nightMode" value="default" checked)
                   | &nbsp;default&nbsp;
